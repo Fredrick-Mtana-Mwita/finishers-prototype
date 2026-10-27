@@ -21,7 +21,7 @@
   const fmt = (n) => 'TSh ' + Math.round(n).toLocaleString('en-US');
   const short = (n) => n >= 1e6 ? 'TSh ' + (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? 'TSh ' + Math.round(n / 1e3) + 'k' : fmt(n);
   const IMG = (n) => 'images/' + n + '.jpg';
-  const KEY = 'fpa_v2_';
+  const KEY = 'fpa_v3_';
   const store = {
     get(k, d) { try { const v = localStorage.getItem(KEY + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(KEY + k, JSON.stringify(v)); } catch (e) { /* storage unavailable: keep in memory */ } }
@@ -229,18 +229,48 @@
     { img: 'hero-interior', alt: 'Modern finished living room', kicker: 'Finish', title: 'Tiles, paint and lighting for the final touch.', body: 'Porcelain tiles, premium paints and modern fittings, all in one place.', cta: 'Shop finishes', href: '#/shop?cat=tiles' },
     { img: 'hero-store', alt: 'Well-stocked hardware aisle', kicker: 'Order online', title: 'Your hardware shop, now open online.', body: 'Add to cart and submit. The shop calls you to confirm. No online payment needed.', cta: 'Start shopping', href: '#/shop' }
   ];
-  const heroCopy = (i) => { const s = SLIDES[i]; return `<span class="kicker light">${s.kicker}</span><h1>${s.title}</h1><p>${s.body}</p><div class="hero-btns"><a class="btn btn-primary btn-lg" href="${s.href}">${s.cta}</a><a class="btn btn-ghost-light btn-lg" href="#/materials">Send a materials list</a></div>`; };
+  // Category carousels: [file, caption, credit]. Unsplash photos need no credit; Wikimedia Commons (CC BY-SA 4.0) ones do.
+  const COMMONS = (who) => `Photo: ${who}, CC BY-SA 4.0, via Wikimedia Commons`;
+  const CAT_PHOTOS = {
+    cement: [['car-cement-1', 'From foundation to roof slab: cement, sand and aggregates for every pour.'], ['car-cement-2', 'Blocks, mortar and everything your fundi needs to build strong walls.'], ['car-cement-3', 'Quality blocks and cement, delivered to your site across Mwanza.'], ['car-cement-4', 'Building homes the East African way, with materials you can trust.'], ['car-cement-5', 'Ordering for a big site? Send one list and get one confirmed quote.'], ['car-cement-6', 'Smooth, durable concrete starts with the right cement class.']],
+    paint: [['car-paint-1', 'Bold colour for walls, shops and homes, inside and out.'], ['car-paint-2', 'Rollers, brushes and trays for a clean, even finish.'], ['car-paint-3', 'Hundreds of shades. Ask the shop to match your colour.'], ['car-paint-4', 'Compare colour chips before you commit to a whole wall.'], ['car-paint-5', 'Premium emulsion and gloss paints in every finish.'], ['car-paint-6', 'Try samples first, then order the full tins with confidence.']],
+    tiles: [['car-tiles-1', 'Marble-look porcelain for bathrooms that feel like a hotel.'], ['car-tiles-2', 'Hard-wearing floor and wall tiles for modern kitchens.'], ['car-tiles-3', 'Decorative wall tiles that add colour and texture.'], ['car-tiles-4', 'Large-format polished tiles for bright, open living spaces.'], ['car-tiles-5', 'Mosaics and hexagons for showers, splashbacks and floors.'], ['car-tiles-6', 'Patterned tiles to make any room stand out.']],
+    electrical: [['car-electrical-1', 'Distribution boards, breakers and cable for safe installations.'], ['car-electrical-2', 'Everything your electrician needs, from conduit to switches.'], ['car-electrical-3', 'House wire and armoured cable by the metre or full roll.'], ['car-electrical-4', 'Testers, meters and fittings for professional work.'], ['car-electrical-5', 'Sockets, junction boxes and accessories in stock.'], ['car-electrical-6', 'Trusted supplies for homes, shops and building sites.', COMMONS('Sid Mbog')]],
+    lighting: [['car-lighting-1', 'Warm filament bulbs for cafés, shops and homes.'], ['car-lighting-2', 'Statement chandeliers for living and dining rooms.'], ['car-lighting-3', 'Pendants that turn any space into a feature.'], ['car-lighting-4', 'Classic crystal lighting for halls and events.'], ['car-lighting-5', 'Modern kitchen and dining lights to finish your project.'], ['car-lighting-6', 'Outdoor and street lighting for compounds and walkways.'], ['car-lighting-7', 'Lighting up Mwanza, from homes to the lakeside.', COMMONS('Prof.Chen Hualin')]],
+    plumbing: [['car-plumbing-1', 'Bathroom fittings for a finish you will love every day.'], ['car-plumbing-2', 'Copper and PPR pipes for hot and cold water systems.'], ['car-plumbing-3', 'Taps and mixers in chrome, brass and matt finishes.'], ['car-plumbing-4', 'Valves, hoses and fittings to get the job done right.'], ['car-plumbing-5', 'Repair parts for leaks and blockages, ready when you need them.'], ['car-plumbing-6', 'Basins, toilets and accessories for complete bathrooms.']],
+    tools: [['car-tools-1', 'Tools for fundis and carpenters who build Tanzania.'], ['car-tools-2', 'Hand tools that last for years of daily work.'], ['car-tools-3', 'Grinders, drills and power tools for heavy jobs.'], ['car-tools-4', 'Fit out your workshop with hardware that is always in stock.'], ['car-tools-5', 'Drills, bits and accessories for every material.'], ['car-tools-6', 'Professional power tools, ready to collect or deliver.']],
+    roofing: [['car-roofing-1', 'Roofing tiles and battens for new builds and re-roofs.'], ['car-roofing-2', 'Iron sheets and clay tiles in classic colours.'], ['car-roofing-3', 'Coloured roofing sheets built for sun and rain.'], ['car-roofing-4', 'Stone-coated tiles for a premium, long-lasting roof.'], ['car-roofing-5', 'Terracotta tiles that keep homes cool.'], ['car-roofing-6', 'Screws, ridges and fixings to finish the job properly.']]
+  };
+
+  // The carousel currently on screen (home slides, or one category's slides).
+  let heroSlides = SLIDES;
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const heroCopy = (i) => {
+    const s = heroSlides[i];
+    const btns = s.cta ? `<div class="hero-btns"><a class="btn btn-primary btn-lg" href="${s.href}">${s.cta}</a><a class="btn btn-ghost-light btn-lg" href="#/materials">Send a materials list</a></div>` : '';
+    return `<span class="kicker light">${s.kicker}</span>${s.cat ? `<h1>${esc(s.title)}</h1>` : `<h1>${s.title}</h1>`}<p>${s.body}</p>${btns}`;
+  };
+  function heroBlock(slides, cls) {
+    heroSlides = slides;
+    return `<div class="hero${cls ? ' ' + cls : ''}" id="hero" aria-roledescription="carousel" aria-label="Featured photos">
+        ${slides.map((s, i) => `<div class="hero-slide${i ? '' : ' on'}"><img src="${IMG(s.img)}" alt="${esc(s.alt)}"${i > 1 ? ' loading="lazy"' : ''}></div>`).join('')}
+        <div class="hero-shade"></div><div class="hero-copy" id="heroCopy">${heroCopy(0)}</div>
+        <span class="hero-credit" id="heroCredit">${slides[0].credit ? esc(slides[0].credit) : ''}</span>
+        <div class="hero-ctrl no-print"><div class="dots">${slides.map((s, i) => `<button class="dot${i ? '' : ' on'}" data-act="hero" data-i="${i}" aria-label="Show slide ${i + 1}"><span></span></button>`).join('')}</div>
+          <span class="hero-no" id="heroNo">01 / ${pad2(slides.length)}</span>
+          <button class="circ" data-act="heroStep" data-d="-1" aria-label="Previous slide">${ic('left')}</button><button class="circ" data-act="heroStep" data-d="1" aria-label="Next slide">${ic('right')}</button></div>
+      </div>`;
+  }
+  // Category carousels: CAT_PHOTOS[slug] = [[file, caption, credit], ...]; falls back to the category photo.
+  function catSlides(cat) {
+    const list = (CAT_PHOTOS[cat.slug] || []).length ? CAT_PHOTOS[cat.slug] : [[cat.img, cat.blurb, '']];
+    return list.map(([img, caption, credit]) => ({ img, alt: caption, kicker: 'Category', title: cat.name, body: esc(caption), credit, cat: true }));
+  }
 
   function vHome() {
     const best = live().filter((p) => p.best);
     return shell(`<section class="wrap">
-      <div class="hero" id="hero" aria-roledescription="carousel">
-        ${SLIDES.map((s, i) => `<div class="hero-slide${i ? '' : ' on'}"><img src="${IMG(s.img)}" alt="${s.alt}"></div>`).join('')}
-        <div class="hero-shade"></div><div class="hero-copy" id="heroCopy">${heroCopy(0)}</div>
-        <div class="hero-ctrl no-print"><div class="dots">${SLIDES.map((s, i) => `<button class="dot${i ? '' : ' on'}" data-act="hero" data-i="${i}" aria-label="Show slide ${i + 1}"><span></span></button>`).join('')}</div>
-          <span class="hero-no" id="heroNo">01 / 03</span>
-          <button class="circ" data-act="heroStep" data-d="-1" aria-label="Previous slide">${ic('left')}</button><button class="circ" data-act="heroStep" data-d="1" aria-label="Next slide">${ic('right')}</button></div>
-      </div>
+      ${heroBlock(SLIDES)}
       <div class="usps">
         <div class="usp"><span class="ic">${ic('truck')}</span><span><b>Delivery across Mwanza</b>Fee confirmed before dispatch</span></div>
         <div class="usp"><span class="ic">${ic('cash')}</span><span><b>No online payment</b>Pay on delivery or at pickup</span></div>
@@ -267,11 +297,12 @@
   let heroI = 0, rowI = 0;
   function heroGo(i) {
     const hero = $('#hero'); if (!hero) return;
-    heroI = (i + SLIDES.length) % SLIDES.length;
+    heroI = (i + heroSlides.length) % heroSlides.length;
     $$('.hero-slide', hero).forEach((s, k) => s.classList.toggle('on', k === heroI));
     $$('.dot', hero).forEach((d, k) => d.classList.toggle('on', k === heroI));
     $('#heroCopy').innerHTML = heroCopy(heroI);
-    $('#heroNo').textContent = '0' + (heroI + 1) + ' / 03';
+    $('#heroNo').textContent = pad2(heroI + 1) + ' / ' + pad2(heroSlides.length);
+    $('#heroCredit').textContent = heroSlides[heroI].credit || '';
   }
   function rowGo(i) {
     const track = $('#rowTrack'); if (!track || M) return;
@@ -280,10 +311,11 @@
     track.style.transform = `translateX(-${rowI * 300}px)`;
     $('#rowPrev').disabled = rowI === 0; $('#rowNext').disabled = rowI >= n - vis;
   }
-  function mountHome() {
-    heroI = 0; rowI = 0; rowGo(0);
-    timers.push(setInterval(() => heroGo(heroI + 1), 6000));
+  function mountHero() {
+    heroI = 0;
+    if ($('#hero') && heroSlides.length > 1) timers.push(setInterval(() => heroGo(heroI + 1), 6000));
   }
+  function mountHome() { rowI = 0; rowGo(0); mountHero(); }
 
   /* shop / search */
   let shopF = null;
@@ -292,7 +324,7 @@
     const text = (q.q || '').trim();
     shopF = { cats: new Set(cat ? [cat.slug] : CATS.map((c) => c.slug)), max: 200000, stock: false, sort: 'popular', q: text };
     const top = cat
-      ? `<div class="cat-hero"><img src="${IMG(cat.img)}" alt=""><div><span class="kicker light">Category</span><h1>${esc(cat.name)}</h1><p>${esc(cat.blurb)}</p></div></div>`
+      ? heroBlock(catSlides(cat), 'cat')
       : `<div class="page-title"><span class="kicker">${text ? 'Search' : 'Shop'}</span><h1>${text ? `Results for “${esc(text)}”` : 'All products'}</h1></div>`;
     const inner = `<div class="f-in"><div class="f-head"><h3>Filter</h3><button class="linkbtn" data-act="resetFilters">Reset</button></div>
       <fieldset><legend>Category</legend>${CATS.map((c) => `<label class="chk"><input type="checkbox" data-filter="cat" value="${c.slug}"${shopF.cats.has(c.slug) ? ' checked' : ''}><span>${esc(c.name)}</span><em>${live().filter((p) => p.cat === c.slug).length}</em></label>`).join('')}</fieldset>
@@ -727,7 +759,7 @@
       else { html = vAdmin(b || 'dashboard', r.q); title = 'Admin · ' + (b || 'dashboard'); }
     } else {
       if (!a) { html = vHome(); mount = mountHome; }
-      else if (a === 'shop') { html = vShop(r.q); title = 'Shop'; }
+      else if (a === 'shop') { html = vShop(r.q); mount = mountHero; title = r.q.cat ? catOf(r.q.cat).name : 'Shop'; }
       else if (a === 'product') { html = vProduct(b); title = (byId(b) || {}).name || 'Product'; }
       else if (a === 'cart') { html = vCart(); title = 'Cart'; }
       else if (a === 'order') { html = vOrder(b); title = 'Order ' + b; }
