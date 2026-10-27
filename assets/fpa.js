@@ -242,6 +242,15 @@
     roofing: [['car-roofing-1', 'Roofing tiles and battens for new builds and re-roofs.'], ['car-roofing-2', 'Iron sheets and clay tiles in classic colours.'], ['car-roofing-3', 'Coloured roofing sheets built for sun and rain.'], ['car-roofing-4', 'Stone-coated tiles for a premium, long-lasting roof.'], ['car-roofing-5', 'Terracotta tiles that keep homes cool.'], ['car-roofing-6', 'Screws, ridges and fixings to finish the job properly.']]
   };
 
+  const CONTRACTOR_SLIDES = [
+    ['car-cement-1', 'One list, one confirmed quote. We check stock, suggest substitutes and call you back.'],
+    ['car-cement-5', 'Bulk cement, blocks and steel delivered by truck to your site.'],
+    ['car-roofing-1', 'Roofing a whole block? Send the full bill of materials in one go.'],
+    ['car-cement-2', 'From the first course of blocks to the final finishes, priced together.'],
+    ['car-tools-1', 'Fundis, carpenters and retailers: restock everything from one shop.'],
+    ['hero-store', 'Thousands of items in stock in Mwanza, confirmed before you pay.']
+  ];
+
   // The carousel currently on screen (home slides, or one category's slides).
   let heroSlides = SLIDES;
   const pad2 = (n) => String(n).padStart(2, '0');
@@ -475,7 +484,7 @@
         <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center"><button class="btn btn-outline" data-act="matAgain">Send another list</button><a class="btn btn-primary" href="#/shop">Browse products</a></div></div>`);
     }
     return shell(`<div class="wrap"><nav class="crumbs"><a href="#/">Home</a><span>/</span><span>Contractor orders</span></nav>
-      <div class="cat-hero"><img src="${IMG('bricks-worker')}" alt=""><div><span class="kicker light">Contractors &amp; retailers</span><h1>Send your materials list</h1><p>One list, one confirmed quote. We check stock, suggest substitutes and call you back.</p></div></div>
+      ${heroBlock(CONTRACTOR_SLIDES.map(([img, body]) => ({ img, alt: body, kicker: 'Contractors &amp; retailers', title: 'Send your materials list', body: esc(body), cat: true })), 'cat')}
       <div class="cart-layout"><form class="cart-main panel stack" data-form="materials" novalidate><h2>Your list</h2>
         <div class="field"><label for="mList">Materials and quantities</label><textarea class="input" id="mList" name="list" rows="8" placeholder="e.g.&#10;Portland Cement 42.5R – 120 bags&#10;Y12 steel bars – 60 pieces&#10;Roofing sheets, charcoal – 45 sheets"></textarea></div>
         <label class="dropzone" for="mFile">${ic('upload', 28)}<b>Or upload a photo / PDF of your list</b><span id="mFileName">Click to choose a file (not sent anywhere in this prototype)</span><input id="mFile" type="file" class="sr" data-act="file"></label>
@@ -763,7 +772,7 @@
       else if (a === 'product') { html = vProduct(b); title = (byId(b) || {}).name || 'Product'; }
       else if (a === 'cart') { html = vCart(); title = 'Cart'; }
       else if (a === 'order') { html = vOrder(b); title = 'Order ' + b; }
-      else if (a === 'materials') { html = vMaterials(); title = 'Contractor orders'; }
+      else if (a === 'materials') { html = vMaterials(); mount = mountHero; title = 'Contractor orders'; }
       else if (a === 'info') { html = vInfo(b); title = (INFO[b] || INFO.how)[0]; }
       else html = vNotFound();
     }
