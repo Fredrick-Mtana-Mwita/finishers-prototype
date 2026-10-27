@@ -415,6 +415,7 @@
             <div class="stepper sm"><button data-act="cartQty" data-k="${l.id}|${l.v}" data-d="-1" aria-label="Decrease">−</button><span>${l.qty}</span><button data-act="cartQty" data-k="${l.id}|${l.v}" data-d="1" aria-label="Increase">+</button></div>
             <span class="lt">${fmt(unitPrice(l.p, l.v) * l.qty)}</span><button class="icon-btn del" data-act="cartDel" data-k="${l.id}|${l.v}" aria-label="Remove ${esc(l.p.name)}">${ic('trash')}</button></div>`).join('')}
         </section>
+        ${suggestRow(suggestFor(CART.map((l) => l.id)), 'Often bought together', 'Customers who buy these usually also need…')}
         <form class="panel stack" data-form="checkout" novalidate><h2>Your details</h2>
           <div class="form-grid">
             <div class="field"><label for="coName">Full name</label><input class="input${err.name ? ' bad' : ''}" id="coName" data-co="name" value="${esc(CO.name)}" autocomplete="name">${err.name ? '<span class="err">Please enter your name.</span>' : ''}</div>
@@ -431,6 +432,20 @@
           ${M ? summaryBox(sub, del, true) : ''}
         </form>
       </div>${M ? '' : `<aside class="cart-side">${summaryBox(sub, del)}</aside>`}</div></div>`);
+  }
+  // Products that usually go with the given ones: same categories first, then best sellers. Never items already chosen.
+  const PAIRS = { cement: ['cement', 'tools', 'roofing'], paint: ['paint', 'tools'], tiles: ['tiles', 'cement'], electrical: ['electrical', 'lighting'], lighting: ['lighting', 'electrical'], plumbing: ['plumbing', 'tools'], tools: ['tools'], roofing: ['roofing', 'tools'] };
+  function suggestFor(ids, n) {
+    const have = new Set(ids.map(Number)); const cats = [];
+    ids.forEach((id) => { const p = byId(id); if (p) (PAIRS[p.cat] || [p.cat]).forEach((c) => { if (!cats.includes(c)) cats.push(c); }); });
+    const pool = live().filter((p) => !have.has(p.id) && p.qty > 0);
+    const ranked = pool.filter((p) => cats.includes(p.cat)).sort((a, b) => cats.indexOf(a.cat) - cats.indexOf(b.cat) || (b.best ? 1 : 0) - (a.best ? 1 : 0))
+      .concat(pool.filter((p) => !cats.includes(p.cat) && p.best));
+    return ranked.slice(0, n || 4);
+  }
+  function suggestRow(list, title, sub) {
+    if (!list.length) return '';
+    return `<section class="suggest no-print"><div class="sec-head" style="margin-bottom:14px"><div><h2 style="font-size:${M ? 20 : 24}px">${title}</h2><span class="muted" style="font-size:14px">${sub}</span></div></div><div class="pgrid">${list.map(pcard).join('')}</div></section>`;
   }
   function summaryBox(sub, del, inForm) {
     return `<div class="${inForm ? '' : 'panel '}stack"><h2>Order summary</h2>
@@ -470,7 +485,9 @@
       <div class="refcard rise2"><span style="display:flex;flex-direction:column"><small>ORDER REFERENCE</small><span class="ref">${esc(o.ref)}</span></span><span style="display:flex;flex-direction:column;text-align:right"><span style="font-size:13px;color:#C9CED4">Estimated total</span><span class="price" style="font-size:24px">${fmt(orderTotal(o))}</span></span></div>
       ${rejected ? '' : `<div class="panel rise3"><div class="timeline">${flow.map((s, i) => { const idx = order.indexOf(s); return `<div class="${at > idx ? 'ok' : at === idx || (s === 'Out for delivery' && at === 3) ? 'on' : ''}"><i></i><b>${labels[i]}</b><small>${['Shop reviews your order', 'We call with the final total', o.mode === 'pickup' ? 'Collect at the shop' : 'On the way to ' + esc(o.area || 'you'), 'Pay on delivery or at pickup'][i]}</small></div>`; }).join('')}</div></div>`}
       <div class="panel stack"><h2 style="font-size:18px">Items</h2>${orderItems(o).map((x) => `<div class="ritem"><img src="${IMG(x.p.img)}" alt=""><span><b>${x.q.toLocaleString()} × ${esc(x.p.name)}</b></span><b>${fmt(x.p.price * x.q)}</b></div>`).join('')}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center"><a class="btn btn-outline" href="#/info/contact">${ic('wa')}Message the shop</a><a class="btn btn-primary" href="#/">Continue shopping</a></div>
+      ${rejected ? '' : `<a class="wa-cta" href="#/info/contact"><span class="wa-ic">${ic('wa', 26)}</span><span><b>Questions about your order?</b>Message the shop on WhatsApp with reference ${esc(o.ref)}</span>${ic('arrow')}</a>`}
+      ${suggestRow(suggestFor(o.items.map((i) => i[0])), 'Need anything else?', 'Add it to a new order, or mention it when the shop calls to confirm.')}
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center"><a class="btn btn-primary" href="#/">Continue shopping</a></div>
       <p class="muted no-print" style="text-align:center;font-size:13px">Prototype tip: sign in to the <a href="#/admin/orders?ref=${o.ref}" style="text-decoration:underline">admin dashboard</a> to confirm this order, then come back to see the status change.</p></div>`);
   }
 
@@ -808,7 +825,12 @@
   };
 
   const ACT = {
-    add(t) { if (t.dataset.flashing) return; addToCart(+t.dataset.id, 1, null); flash(t, ic('check', 18) + (M ? '' : '<span>Added</span>')); },
+    add(t) {
+      if (t.dataset.flashing) return;
+      addToCart(+t.dataset.id, 1, null); flash(t, ic('check', 18) + (M ? '' : '<span>Added</span>'));
+      // On the cart page the new item belongs in the list straight away.
+      if (route().parts[0] === 'cart') setTimeout(() => render(true), 700);
+    },
     hero(t) { heroGo(+t.dataset.i); restartHero(); },
     heroStep(t) { heroGo(heroI + +t.dataset.d); restartHero(); },
     row(t) { rowGo(rowI + +t.dataset.d); },

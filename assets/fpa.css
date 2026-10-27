@@ -351,6 +351,18 @@ textarea.input { height: auto; padding: 12px 14px; resize: vertical; }
 .seg span { display: flex; flex-direction: column; }
 .seg small { font-size: 13px; opacity: .85; }
 
+/* ---------- cart / confirmation extras ---------- */
+.suggest .pgrid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.suggest .ph { height: 150px; }
+.done-wrap .suggest { margin-top: 10px; text-align: left; }
+.wa-cta { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: 18px; background: #1F8F4E; color: #fff; transition: transform .25s, box-shadow .25s, filter .2s; }
+.wa-cta:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(31,143,78,.35); filter: brightness(1.05); }
+.wa-cta .wa-ic { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.wa-cta > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; font-size: 14px; color: #E3F5EA; }
+.wa-cta b { font-size: 17px; color: #fff; }
+.m .suggest .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.m .suggest .ph { height: 120px; }
+
 /* ---------- confirmation ---------- */
 .done-wrap { max-width: 760px; margin: 0 auto; padding: 56px 32px 80px; display: flex; flex-direction: column; gap: 22px; }
 .ring { align-self: center; width: 104px; height: 104px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 14px var(--greenSoft); animation: ring .6s cubic-bezier(.2,.9,.3,1.4) both; }
