@@ -8,3 +8,5 @@ Interactive prototype of the Finishers Point Africa online store (Mwanza, Tanzan
 
 All data is sample data stored only in the visitor's browser. Nothing is sent anywhere.
 Photos: Unsplash (free licence).
+
+Live prototype: https://fredrick-mtana-mwita.github.io/finishers-prototype/
