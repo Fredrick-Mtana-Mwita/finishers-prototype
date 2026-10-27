@@ -21,7 +21,7 @@
   const fmt = (n) => 'TSh ' + Math.round(n).toLocaleString('en-US');
   const short = (n) => n >= 1e6 ? 'TSh ' + (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? 'TSh ' + Math.round(n / 1e3) + 'k' : fmt(n);
   const IMG = (n) => 'images/' + n + '.jpg';
-  const KEY = 'fpa_v3_';
+  const KEY = 'fpa_v4_';
   const store = {
     get(k, d) { try { const v = localStorage.getItem(KEY + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(KEY + k, JSON.stringify(v)); } catch (e) { /* storage unavailable: keep in memory */ } }
@@ -95,14 +95,14 @@
     { id: 16, cat: 'cement', brand: 'Generic', name: 'Building Blocks 6 inch', unit: 'piece', price: 1200, qty: 5000, low: 800, img: 'bricks-worker', photos: ['bricks-worker', 'hero-site'], spec: [['Size', '6 inch hollow']] }
   ];
   const SEED_ORDERS = [
-    { ref: 'FPA-7KQ3-2941', name: 'Neema Mushi', phone: '+255 7XX XXX 214', mode: 'delivery', area: 'Ilemela – Buswelu', note: 'Near Buswelu market, blue gate. Site behind the church.', items: [[1, 10], [2, 2], [4, 6]], status: 'Pending', time: '9:42 AM', date: 'Today', fee: 15000, log: [['9:42', 'Order submitted online']] },
-    { ref: 'FPA-3MZ8-1187', name: 'Juma Construction Ltd', phone: '+255 7XX XXX 908', mode: 'delivery', area: 'Nyamagana – Mkuyuni', note: 'Deliver to site gate. Ask for the foreman.', items: [[1, 100], [16, 400], [11, 30]], status: 'Pending', time: '9:15 AM', date: 'Today', fee: 60000, log: [['9:15', 'Order submitted online']] },
-    { ref: 'FPA-9TR2-6620', name: 'Grace Kweka', phone: '+255 6XX XXX 331', mode: 'pickup', area: '', note: '', items: [[8, 2], [2, 1]], status: 'Pending', time: '8:51 AM', date: 'Today', fee: 0, log: [['8:51', 'Order submitted online']] },
-    { ref: 'FPA-5QW1-4402', name: 'Baraka Mollel', phone: '+255 7XX XXX 772', mode: 'delivery', area: 'Ilemela – Kiseke', note: '', items: [[3, 12], [9, 4]], status: 'Confirmed', time: 'Yesterday', date: 'Yesterday', fee: 20000, log: [['Yesterday', 'Order submitted online'], ['Yesterday', 'Confirmed by Asha J. · stock reserved']] },
-    { ref: 'FPA-2HN6-9015', name: 'Mwanza Retail Hub', phone: '+255 7XX XXX 050', mode: 'delivery', area: 'Nyamagana – City centre', note: 'Shop delivery, back entrance.', items: [[4, 60], [6, 4], [5, 2]], status: 'Preparing', time: 'Yesterday', date: 'Yesterday', fee: 15000, log: [['Yesterday', 'Order submitted online'], ['Yesterday', 'Confirmed by Asha J. · stock reserved'], ['Yesterday', 'Preparing']] },
-    { ref: 'FPA-8LD4-3378', name: 'Said Hamisi', phone: '+255 6XX XXX 619', mode: 'delivery', area: 'Nyamagana – Buhongwa', note: '', items: [[1, 30]], status: 'Out for delivery', time: 'Yesterday', date: 'Yesterday', fee: 25000, log: [['Yesterday', 'Order submitted online'], ['Yesterday', 'Confirmed by Daudi M.'], ['Today', 'Out for delivery']] },
-    { ref: 'FPA-6CV9-7741', name: 'Rehema Paul', phone: '+255 7XX XXX 488', mode: 'pickup', area: '', note: '', items: [[7, 1]], status: 'Delivered', time: '24 Oct', date: '24 Oct', fee: 0, log: [['24 Oct', 'Order submitted online'], ['24 Oct', 'Collected at shop']] },
-    { ref: 'FPA-4BX7-2290', name: 'Peter Otieno', phone: '+255 7XX XXX 125', mode: 'delivery', area: 'Misungwi', note: '', items: [[12, 200]], status: 'Rejected', time: '24 Oct', date: '24 Oct', fee: 0, reason: 'PPR pipe out of stock; customer will reorder next week.', log: [['24 Oct', 'Order submitted online'], ['24 Oct', 'Rejected by Asha J.']] }
+    { ref: 'FPA-7KQ3-2941', branch: 'mwanza', name: 'Neema Mushi', phone: '+255 7XX XXX 214', mode: 'delivery', area: 'Ilemela – Buswelu', note: 'Near Buswelu market, blue gate. Site behind the church.', items: [[1, 10], [2, 2], [4, 6]], status: 'Pending', time: '9:42 AM', date: 'Today', fee: 15000, log: [['9:42', 'Order submitted online']] },
+    { ref: 'FPA-3MZ8-1187', branch: 'tarime', name: 'Juma Construction Ltd', phone: '+255 7XX XXX 908', mode: 'delivery', area: 'Nyamongo', note: 'Deliver to the site gate near the mine road. Ask for the foreman.', items: [[1, 100], [16, 400], [11, 30]], status: 'Pending', time: '9:15 AM', date: 'Today', fee: 60000, log: [['9:15', 'Order submitted online']] },
+    { ref: 'FPA-9TR2-6620', branch: 'tarime', name: 'Grace Kweka', phone: '+255 6XX XXX 331', mode: 'pickup', area: '', note: '', items: [[8, 2], [2, 1]], status: 'Pending', time: '8:51 AM', date: 'Today', fee: 0, log: [['8:51', 'Order submitted online']] },
+    { ref: 'FPA-5QW1-4402', branch: 'mwanza', name: 'Baraka Mollel', phone: '+255 7XX XXX 772', mode: 'delivery', area: 'Ilemela – Kiseke', note: '', items: [[3, 12], [9, 4]], status: 'Confirmed', time: 'Yesterday', date: 'Yesterday', fee: 20000, log: [['Yesterday', 'Order submitted online'], ['Yesterday', 'Confirmed by Asha J. · stock reserved']] },
+    { ref: 'FPA-2HN6-9015', branch: 'mwanza', name: 'Mwanza Retail Hub', phone: '+255 7XX XXX 050', mode: 'delivery', area: 'Nyamagana – City centre', note: 'Shop delivery, back entrance.', items: [[4, 60], [6, 4], [5, 2]], status: 'Preparing', time: 'Yesterday', date: 'Yesterday', fee: 15000, log: [['Yesterday', 'Order submitted online'], ['Yesterday', 'Confirmed by Asha J. · stock reserved'], ['Yesterday', 'Preparing']] },
+    { ref: 'FPA-8LD4-3378', branch: 'tarime', name: 'Said Hamisi', phone: '+255 6XX XXX 619', mode: 'delivery', area: 'Tarime town', note: '', items: [[1, 30]], status: 'Out for delivery', time: 'Yesterday', date: 'Yesterday', fee: 25000, log: [['Yesterday', 'Order submitted online'], ['Yesterday', 'Confirmed by Daudi M.'], ['Today', 'Out for delivery']] },
+    { ref: 'FPA-6CV9-7741', branch: 'mwanza', name: 'Rehema Paul', phone: '+255 7XX XXX 488', mode: 'pickup', area: '', note: '', items: [[7, 1]], status: 'Delivered', time: '24 Oct', date: '24 Oct', fee: 0, log: [['24 Oct', 'Order submitted online'], ['24 Oct', 'Collected at shop']] },
+    { ref: 'FPA-4BX7-2290', branch: 'tarime', name: 'Peter Otieno', phone: '+255 7XX XXX 125', mode: 'delivery', area: 'Sirari', note: '', items: [[12, 200]], status: 'Rejected', time: '24 Oct', date: '24 Oct', fee: 0, reason: 'PPR pipe out of stock; customer will reorder next week.', log: [['24 Oct', 'Order submitted online'], ['24 Oct', 'Rejected by Asha J.']] }
   ];
   const SEED_MOVES = [
     { t: 'Today 8:10', pid: 1, type: 'Stock in', delta: 200, note: 'Supplier delivery · Twiga', by: 'Daudi M.' },
@@ -116,8 +116,8 @@
     { ref: 'FPA-0PL2-5532', method: 'Bank transfer', amount: 1250000, txn: 'CRDB-XXXX-881', by: 'Asha J.', date: '22 Oct' }
   ];
   const SEED_USERS = [
-    { name: 'Asha J.', email: 'asha@[shop-domain]', role: 'Administrator', status: 'Active', last: 'Now' },
-    { name: 'Daudi M.', email: 'daudi@[shop-domain]', role: 'Administrator', status: 'Active', last: 'Today 8:10' }
+    { name: 'Asha J.', email: 'asha@[shop-domain]', branch: 'Mwanza', role: 'Administrator', status: 'Active', last: 'Now' },
+    { name: 'Daudi M.', email: 'daudi@[shop-domain]', branch: 'Tarime', role: 'Administrator', status: 'Active', last: 'Today 8:10' }
   ];
 
   let CATS = store.get('cats', clone(SEED_CATS));
@@ -127,13 +127,20 @@
   let PAYMENTS = store.get('payments', clone(SEED_PAYMENTS));
   let USERS = store.get('users', clone(SEED_USERS));
   let CART = store.get('cart', [{ id: 1, v: 0, qty: 10 }, { id: 2, v: null, qty: 2 }, { id: 4, v: null, qty: 6 }]);
-  let CO = store.get('checkout', { name: '', phone: '', email: '', mode: 'delivery', area: 'Ilemela – Buswelu', addr: '', notes: '' });
+  let CO = store.get('checkout', { name: '', phone: '', email: '', mode: 'delivery', branch: 'mwanza', area: 'Ilemela – Buswelu', addr: '', notes: '' });
+  if (!CO.branch) CO.branch = 'mwanza';
   let FAVS = new Set(store.get('favs', []));
   const save = () => {
     store.set('cats', CATS); store.set('products', PRODUCTS); store.set('orders', ORDERS); store.set('moves', MOVES);
     store.set('payments', PAYMENTS); store.set('users', USERS); store.set('cart', CART); store.set('checkout', CO); store.set('favs', [...FAVS]);
   };
 
+  // Two branches. Addresses and phone numbers are placeholders until the shop confirms them.
+  const BRANCHES = {
+    mwanza: { name: 'Mwanza', blurb: 'Ilemela & Nyamagana', address: '[MWANZA SHOP ADDRESS], Mwanza', phone: '[MWANZA PHONE]', areas: ['Ilemela – Buswelu', 'Ilemela – Kiseke', 'Nyamagana – Mkuyuni', 'Nyamagana – City centre', 'Nyamagana – Buhongwa', 'Other area near Mwanza'] },
+    tarime: { name: 'Tarime', blurb: 'Tarime town, Nyamongo, Sirari', address: '[TARIME SHOP ADDRESS], Tarime, Mara', phone: '[TARIME PHONE]', areas: ['Tarime town', 'Nyamongo', 'Sirari', 'Nyamwaga', 'Susuni', 'Other area near Tarime'] }
+  };
+  const brOf = (o) => BRANCHES[o.branch] || BRANCHES.mwanza;
   const byId = (id) => PRODUCTS.find((p) => p.id === +id);
   const catOf = (slug) => CATS.find((c) => c.slug === slug) || { slug, name: slug, img: 'store-shelves', blurb: '' };
   const live = () => PRODUCTS.filter((p) => p.published !== false);
@@ -182,13 +189,13 @@
     const brand = `<a href="#/" class="logo" aria-label="Finishers Point Africa home"><span class="logo-mark">F</span><span class="logo-text"><b>FINISHERS POINT</b><span>AFRICA</span></span></a>`;
     const search = `<form class="search" data-form="search" role="search">${ic('search')}<label class="sr" for="q">Search products</label><input id="q" name="q" type="search" placeholder="Search cement, paint, tiles, cables…" value="${esc(r.q.q || '')}">${M ? '' : '<button class="btn btn-dark btn-sm" type="submit">Search</button>'}</form>`;
     if (M) {
-      const msg = '<span>Delivery across Mwanza</span><span style="color:#F2A900;font-weight:600">Pay on delivery or at pickup</span><span>Contractor orders welcome</span><span style="color:#F2A900;font-weight:600">Call or WhatsApp to confirm</span>';
+      const msg = '<span>Branches in Mwanza &amp; Tarime</span><span style="color:#F2A900;font-weight:600">Pay on delivery or at pickup</span><span>Contractor orders welcome</span><span style="color:#F2A900;font-weight:600">Call or WhatsApp to confirm</span>';
       return `<div class="topbar"><div class="marquee">${msg}${msg}</div></div>
       <header class="header"><div class="wrap header-row"><button class="icon-btn" data-act="menu" aria-label="Open menu">${ic('menu', 24)}</button>${brand}
       <a href="#/cart" class="icon-btn" aria-label="Cart, ${n} items">${ic('cart', 24)}<span class="count" id="cartCount">${n}</span></a></div>
       <div class="wrap search-row">${search}</div></header>`;
     }
-    return `<div class="topbar"><div class="wrap"><span>Delivery across Mwanza · <b>Pay on delivery or at pickup</b></span><span>Call / WhatsApp [PHONE NUMBER] · Mon–Sat [OPENING HOURS]</span></div></div>
+    return `<div class="topbar"><div class="wrap"><span>Branches in Mwanza &amp; Tarime · <b>Pay on delivery or at pickup</b></span><span>Call / WhatsApp [PHONE NUMBER] · Mon–Sat [OPENING HOURS]</span></div></div>
     <header class="header"><div class="wrap header-row">${brand}${search}
       <a href="#/info/contact" class="btn btn-outline">${ic('wa')}WhatsApp</a>
       <a href="#/cart" class="btn btn-primary">${ic('cart')}Cart<span class="count" id="cartCount">${n}</span></a></div>
@@ -202,11 +209,11 @@
   }
   function footer() {
     return `<footer class="footer"><div class="wrap fcols">
-      <div><a href="#/" class="flogo">FINISHERS POINT AFRICA</a><p>Hardware, building materials and finishing products in Mwanza, Tanzania.</p>
+      <div><a href="#/" class="flogo">FINISHERS POINT AFRICA</a><p>Hardware, building materials and finishing products. Branches in Mwanza and Tarime, Tanzania.</p>
         <button class="btn btn-sm btn-ghost-light no-print" data-act="print" style="margin-top:8px">${ic('print', 18)}Save this page as PDF</button></div>
       <div><strong>Shop</strong>${CATS.slice(0, 5).map((c) => `<a class="nl" href="#/shop?cat=${c.slug}">${esc(c.name)}</a>`).join('')}<a class="nl" href="#/shop">All products</a></div>
       <div><strong>Help</strong><a class="nl" href="#/info/how">How ordering works</a><a class="nl" href="#/info/delivery">Delivery policy</a><a class="nl" href="#/info/returns">Returns &amp; cancellations</a><a class="nl" href="#/info/privacy">Privacy</a><a class="nl" href="#/info/contact">Contact us</a></div>
-      <div><strong>Visit us</strong><span>[SHOP ADDRESS], Mwanza</span><span>[PHONE NUMBER]</span><span>Mon–Sat, [OPENING HOURS]</span>
+      <div><strong>Our branches</strong>${Object.values(BRANCHES).map((b) => `<span><b style="color:#fff">${b.name}:</b> ${b.address} · ${b.phone}</span>`).join('')}<span>Mon–Sat, [OPENING HOURS]</span>
         <a class="nl" href="#/admin/login">Staff login</a></div>
     </div><div class="wrap fbottom"><span>© 2026 Finishers Point Africa · prototype with sample data</span><button class="nl no-print" data-act="printAll">Save all store pages as one PDF</button></div></footer>`;
   }
@@ -225,14 +232,14 @@
 
   /* ---------------- storefront pages ---------------- */
   const SLIDES = [
-    { img: 'hero-site', alt: 'Builders working on a roof', kicker: 'Build', title: 'Cement, steel and roofing for every site.', body: 'Order bags or truckloads online. We confirm stock by phone and deliver across Mwanza.', cta: 'Shop building materials', href: '#/shop?cat=cement' },
+    { img: 'hero-site', alt: 'Builders working on a roof', kicker: 'Build', title: 'Cement, steel and roofing for every site.', body: 'Order bags or truckloads online. We confirm stock by phone and deliver from our Mwanza and Tarime branches.', cta: 'Shop building materials', href: '#/shop?cat=cement' },
     { img: 'hero-interior', alt: 'Modern finished living room', kicker: 'Finish', title: 'Tiles, paint and lighting for the final touch.', body: 'Porcelain tiles, premium paints and modern fittings, all in one place.', cta: 'Shop finishes', href: '#/shop?cat=tiles' },
     { img: 'hero-store', alt: 'Well-stocked hardware aisle', kicker: 'Order online', title: 'Your hardware shop, now open online.', body: 'Add to cart and submit. The shop calls you to confirm. No online payment needed.', cta: 'Start shopping', href: '#/shop' }
   ];
   // Category carousels: [file, caption, credit]. Unsplash photos need no credit; Wikimedia Commons (CC BY-SA 4.0) ones do.
   const COMMONS = (who) => `Photo: ${who}, CC BY-SA 4.0, via Wikimedia Commons`;
   const CAT_PHOTOS = {
-    cement: [['car-cement-1', 'From foundation to roof slab: cement, sand and aggregates for every pour.'], ['car-cement-2', 'Blocks, mortar and everything your fundi needs to build strong walls.'], ['car-cement-3', 'Quality blocks and cement, delivered to your site across Mwanza.'], ['car-cement-4', 'Building homes the East African way, with materials you can trust.'], ['car-cement-5', 'Ordering for a big site? Send one list and get one confirmed quote.'], ['car-cement-6', 'Smooth, durable concrete starts with the right cement class.']],
+    cement: [['car-cement-1', 'From foundation to roof slab: cement, sand and aggregates for every pour.'], ['car-cement-2', 'Blocks, mortar and everything your fundi needs to build strong walls.'], ['car-cement-3', 'Quality blocks and cement, delivered to your site from Mwanza and Tarime.'], ['car-cement-4', 'Building homes the East African way, with materials you can trust.'], ['car-cement-5', 'Ordering for a big site? Send one list and get one confirmed quote.'], ['car-cement-6', 'Smooth, durable concrete starts with the right cement class.']],
     paint: [['car-paint-1', 'Bold colour for walls, shops and homes, inside and out.'], ['car-paint-2', 'Rollers, brushes and trays for a clean, even finish.'], ['car-paint-3', 'Hundreds of shades. Ask the shop to match your colour.'], ['car-paint-4', 'Compare colour chips before you commit to a whole wall.'], ['car-paint-5', 'Premium emulsion and gloss paints in every finish.'], ['car-paint-6', 'Try samples first, then order the full tins with confidence.']],
     tiles: [['car-tiles-1', 'Marble-look porcelain for bathrooms that feel like a hotel.'], ['car-tiles-2', 'Hard-wearing floor and wall tiles for modern kitchens.'], ['car-tiles-3', 'Decorative wall tiles that add colour and texture.'], ['car-tiles-4', 'Large-format polished tiles for bright, open living spaces.'], ['car-tiles-5', 'Mosaics and hexagons for showers, splashbacks and floors.'], ['car-tiles-6', 'Patterned tiles to make any room stand out.']],
     electrical: [['car-electrical-1', 'Distribution boards, breakers and cable for safe installations.'], ['car-electrical-2', 'Everything your electrician needs, from conduit to switches.'], ['car-electrical-3', 'House wire and armoured cable by the metre or full roll.'], ['car-electrical-4', 'Testers, meters and fittings for professional work.'], ['car-electrical-5', 'Sockets, junction boxes and accessories in stock.'], ['car-electrical-6', 'Trusted supplies for homes, shops and building sites.', COMMONS('Sid Mbog')]],
@@ -248,7 +255,7 @@
     ['car-roofing-1', 'Roofing a whole block? Send the full bill of materials in one go.'],
     ['car-cement-2', 'From the first course of blocks to the final finishes, priced together.'],
     ['car-tools-1', 'Fundis, carpenters and retailers: restock everything from one shop.'],
-    ['hero-store', 'Thousands of items in stock in Mwanza, confirmed before you pay.']
+    ['hero-store', 'Thousands of items in stock at our Mwanza and Tarime branches.']
   ];
 
   // The carousel currently on screen (home slides, or one category's slides).
@@ -281,14 +288,14 @@
     return shell(`<section class="wrap">
       ${heroBlock(SLIDES)}
       <div class="usps">
-        <div class="usp"><span class="ic">${ic('truck')}</span><span><b>Delivery across Mwanza</b>Fee confirmed before dispatch</span></div>
+        <div class="usp"><span class="ic">${ic('truck')}</span><span><b>Mwanza &amp; Tarime branches</b>Delivery from both, fee confirmed first</span></div>
         <div class="usp"><span class="ic">${ic('cash')}</span><span><b>No online payment</b>Pay on delivery or at pickup</span></div>
         <div class="usp"><span class="ic">${ic('phone')}</span><span><b>Shop confirms every order</b>We call to check stock and total</span></div>
         <div class="usp"><span class="ic">${ic('list')}</span><span><b>Contractor orders</b>Bulk lists, one confirmed total</span></div>
       </div></section>
     <section class="wrap section"><div class="sec-head"><div><span class="kicker">Categories</span><h2>Everything to build and finish</h2></div><a class="nl" href="#/shop">View all products →</a></div>
       <div class="cat-grid">${CATS.map((c) => `<a href="#/shop?cat=${c.slug}" class="tile lift"><img src="${IMG(c.img)}" alt=""><span class="cap"><span><b>${esc(c.name)}</b><small>${PRODUCTS.filter((p) => p.cat === c.slug && p.published !== false).length} products</small></span><span class="arrow">${ic('arrow', 18)}</span></span></a>`).join('')}</div></section>
-    <section class="wrap section"><div class="sec-head"><div><span class="kicker">Best sellers</span><h2>What Mwanza is building with</h2></div>
+    <section class="wrap section"><div class="sec-head"><div><span class="kicker">Best sellers</span><h2>What our customers are building with</h2></div>
       <div class="row-arrows no-print"><button class="circ" data-act="row" data-d="-1" id="rowPrev" aria-label="Scroll left">${ic('left')}</button><button class="circ" data-act="row" data-d="1" id="rowNext" aria-label="Scroll right">${ic('right')}</button></div></div>
       <div class="row-wrap"><div class="row-track" id="rowTrack">${best.map(pcard).join('')}</div></div></section>
     <section class="wrap section"><div class="sec-head"><div><span class="kicker">How it works</span><h2>Order in three steps</h2></div><a class="nl" href="#/info/how">Read more →</a></div>
@@ -373,7 +380,7 @@
     const tabBody = pdp.tab === 'specs'
       ? `<div class="spec-grid">${[['Brand', p.brand], ['Category', catOf(p.cat).name], ['Unit', unitLabel(p, pdp.v)], ['SKU', sku(p)]].concat(p.spec || []).map(([k, v]) => `<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('')}</div>`
       : pdp.tab === 'delivery'
-        ? `<div class="info-cards"><div><b>Delivery in Mwanza</b>Fee depends on location and load. The shop confirms it when they call you.</div><div><b>Free pickup</b>Collect from the shop once your order is confirmed.</div><div><b>Bulk orders</b>Large orders go by truck, usually the next working day.</div></div>`
+        ? `<div class="info-cards"><div><b>Delivery from Mwanza &amp; Tarime</b>Fee depends on location and load. The branch confirms it when they call you.</div><div><b>Free pickup</b>Collect from the Mwanza or Tarime shop once your order is confirmed.</div><div><b>Bulk orders</b>Large orders go by truck, usually the next working day.</div></div>`
         : `<p class="lead" style="max-width:820px">${esc(p.desc || DESC[p.cat] || '')}</p>`;
     return shell(`<div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a href="#/">Home</a><span>/</span><a href="#/shop?cat=${p.cat}">${esc(catOf(p.cat).name)}</a><span>/</span><span>${esc(p.name)}</span></nav>
       <section class="pdp">
@@ -395,7 +402,7 @@
           <div class="buyrow">${p.qty <= 0 ? '<button class="btn btn-lg grow" disabled>Out of stock – ask the shop</button>' : `<button class="btn btn-primary btn-lg grow" data-act="pdpAdd" id="pdpAdd">${ic('cart')}<span>Add to cart</span></button>`}
             <button class="icon-btn fav${FAVS.has(p.id) ? ' on' : ''}" data-act="fav" data-id="${p.id}" aria-label="Save to favourites" aria-pressed="${FAVS.has(p.id)}">${ic('heart', 22)}</button></div>
           <a class="btn btn-outline btn-block" href="#/info/contact">${ic('wa')}Ask about this product on WhatsApp</a>
-          <div class="mini-cards"><div>${ic('truck')}<span><b>Delivery in Mwanza</b>Fee confirmed by phone</span></div><div>${ic('home')}<span><b>Free pickup</b>Collect after confirmation</span></div></div>
+          <div class="mini-cards"><div>${ic('truck')}<span><b>Mwanza &amp; Tarime delivery</b>Fee confirmed by phone</span></div><div>${ic('home')}<span><b>Free pickup</b>At either branch</span></div></div>
         </div>
       </section>
       <section class="panel tabs-panel"><div class="tabs" role="tablist">${[['desc', 'Overview'], ['specs', 'Specifications'], ['delivery', 'Delivery & pickup']].map(([k, l]) => `<button class="tab${pdp.tab === k ? ' on' : ''}" role="tab" aria-selected="${pdp.tab === k}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div><div class="tab-body">${tabBody}</div></section>
@@ -422,11 +429,12 @@
             <div class="field"><label for="coPhone">Phone number</label><div class="phone"><span class="cc">+255</span><input class="input${err.phone ? ' bad' : ''}" id="coPhone" type="tel" data-co="phone" value="${esc(CO.phone)}" placeholder="7XX XXX XXX" autocomplete="tel-national"></div>${err.phone ? '<span class="err">Enter a 9-digit phone number.</span>' : '<span class="hint">The shop will call or WhatsApp this number to confirm.</span>'}</div>
             <div class="field"><label for="coEmail">Email <small>(optional)</small></label><input class="input" id="coEmail" type="email" data-co="email" value="${esc(CO.email)}" placeholder="you@example.com" autocomplete="email"></div>
           </div>
+          <div class="field"><span class="lbl">Which branch?</span><div class="seg">${Object.entries(BRANCHES).map(([k, b]) => `<button type="button" class="${CO.branch === k ? 'on' : ''}" data-act="coBranch" data-b="${k}" aria-pressed="${CO.branch === k}">${ic('pin', 26)}<span><b>${b.name}</b><small>${b.blurb}</small></span></button>`).join('')}</div></div>
           <div class="field"><span class="lbl">How do you want to receive it?</span><div class="seg">
-            <button type="button" class="${del ? 'on' : ''}" data-act="coMode" data-m="delivery" aria-pressed="${del}">${ic('truck', 26)}<span><b>Delivery</b><small>Anywhere in Mwanza · fee confirmed by the shop</small></span></button>
-            <button type="button" class="${del ? '' : 'on'}" data-act="coMode" data-m="pickup" aria-pressed="${!del}">${ic('home', 26)}<span><b>Pickup</b><small>Free · collect after confirmation</small></span></button></div></div>
+            <button type="button" class="${del ? 'on' : ''}" data-act="coMode" data-m="delivery" aria-pressed="${del}">${ic('truck', 26)}<span><b>Delivery</b><small>Around ${brOf(CO).name} · fee confirmed by the branch</small></span></button>
+            <button type="button" class="${del ? '' : 'on'}" data-act="coMode" data-m="pickup" aria-pressed="${!del}">${ic('home', 26)}<span><b>Pickup</b><small>Free · at the ${brOf(CO).name} shop</small></span></button></div></div>
           ${del ? `<div class="form-grid page">
-            <div class="field"><label for="coArea">Area</label><select class="select" id="coArea" data-co="area">${['Ilemela – Buswelu', 'Ilemela – Kiseke', 'Nyamagana – Mkuyuni', 'Nyamagana – City centre', 'Nyamagana – Buhongwa', 'Other area in Mwanza'].map((a) => `<option${a === CO.area ? ' selected' : ''}>${a}</option>`).join('')}</select></div>
+            <div class="field"><label for="coArea">Area</label><select class="select" id="coArea" data-co="area">${brOf(CO).areas.map((a) => `<option${a === CO.area ? ' selected' : ''}>${a}</option>`).join('')}</select></div>
             <div class="field"><label for="coNotes">Delivery notes <small>(optional)</small></label><input class="input" id="coNotes" data-co="notes" value="${esc(CO.notes)}" placeholder="e.g. call on arrival, deliver before 2 pm"></div>
             <div class="field full"><label for="coAddr">Street, landmark or site description</label><textarea class="input${err.addr ? ' bad' : ''}" id="coAddr" rows="3" data-co="addr" placeholder="e.g. Near Buswelu market, blue gate">${esc(CO.addr)}</textarea>${err.addr ? '<span class="err">Tell us where to deliver.</span>' : ''}</div></div>` : ''}
           ${M ? summaryBox(sub, del, true) : ''}
@@ -467,7 +475,7 @@
     const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; const pick = () => A[Math.floor(Math.random() * A.length)];
     const ref = 'FPA-' + pick() + pick() + pick() + pick() + '-' + String(Math.floor(1000 + Math.random() * 9000));
     const extra = cartLines().reduce((s, l) => s + (unitPrice(l.p, l.v) - l.p.price) * l.qty, 0);
-    ORDERS.unshift({ ref, name: CO.name.trim(), phone: '+255 ' + CO.phone.trim(), mode: CO.mode, area: CO.mode === 'delivery' ? CO.area : '', note: CO.mode === 'delivery' ? [CO.addr, CO.notes].filter(Boolean).join(' · ') : '', email: CO.email, items: CART.map((l) => [l.id, l.qty]), extra, status: 'Pending', time: now(), date: 'Today', fee: 0, fresh: true, log: [[now(), 'Order submitted online']] });
+    ORDERS.unshift({ ref, branch: CO.branch, name: CO.name.trim(), phone: '+255 ' + CO.phone.trim(), mode: CO.mode, area: CO.mode === 'delivery' ? CO.area : '', note: CO.mode === 'delivery' ? [CO.addr, CO.notes].filter(Boolean).join(' · ') : '', email: CO.email, items: CART.map((l) => [l.id, l.qty]), extra, status: 'Pending', time: now(), date: 'Today', fee: 0, fresh: true, log: [[now(), 'Order submitted online']] });
     CART = []; save(); go('#/order/' + ref);
   }
   function vOrder(ref) {
@@ -482,8 +490,8 @@
       <div class="ring">${rejected ? `<svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>` : `<svg class="i" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>`}</div>
       <div class="rise1" style="text-align:center;display:flex;flex-direction:column;gap:8px"><h1 style="font-size:${M ? 30 : 40}px">${rejected ? 'Order not accepted' : o.status === 'Pending' ? 'Order received' : 'Order ' + o.status.toLowerCase()}</h1>
         <p class="muted" style="font-size:17px">${rejected ? esc(o.reason || 'The shop could not accept this order.') : o.status === 'Pending' ? `Your order is <b style="color:#16191C">awaiting shop confirmation</b>. We will call ${esc(o.phone)} shortly to confirm stock, delivery fee and your final total.` : 'The shop has updated your order. You will get a call before delivery.'}</p></div>
-      <div class="refcard rise2"><span style="display:flex;flex-direction:column"><small>ORDER REFERENCE</small><span class="ref">${esc(o.ref)}</span></span><span style="display:flex;flex-direction:column;text-align:right"><span style="font-size:13px;color:#C9CED4">Estimated total</span><span class="price" style="font-size:24px">${fmt(orderTotal(o))}</span></span></div>
-      ${rejected ? '' : `<div class="panel rise3"><div class="timeline">${flow.map((s, i) => { const idx = order.indexOf(s); return `<div class="${at > idx ? 'ok' : at === idx || (s === 'Out for delivery' && at === 3) ? 'on' : ''}"><i></i><b>${labels[i]}</b><small>${['Shop reviews your order', 'We call with the final total', o.mode === 'pickup' ? 'Collect at the shop' : 'On the way to ' + esc(o.area || 'you'), 'Pay on delivery or at pickup'][i]}</small></div>`; }).join('')}</div></div>`}
+      <div class="refcard rise2"><span style="display:flex;flex-direction:column"><small>ORDER REFERENCE · ${brOf(o).name.toUpperCase()} BRANCH</small><span class="ref">${esc(o.ref)}</span></span><span style="display:flex;flex-direction:column;text-align:right"><span style="font-size:13px;color:#C9CED4">Estimated total</span><span class="price" style="font-size:24px">${fmt(orderTotal(o))}</span></span></div>
+      ${rejected ? '' : `<div class="panel rise3"><div class="timeline">${flow.map((s, i) => { const idx = order.indexOf(s); return `<div class="${at > idx ? 'ok' : at === idx || (s === 'Out for delivery' && at === 3) ? 'on' : ''}"><i></i><b>${labels[i]}</b><small>${['Shop reviews your order', 'We call with the final total', o.mode === 'pickup' ? 'Collect at the ' + brOf(o).name + ' shop' : 'On the way to ' + esc(o.area || 'you'), 'Pay on delivery or at pickup'][i]}</small></div>`; }).join('')}</div></div>`}
       <div class="panel stack"><h2 style="font-size:18px">Items</h2>${orderItems(o).map((x) => `<div class="ritem"><img src="${IMG(x.p.img)}" alt=""><span><b>${x.q.toLocaleString()} × ${esc(x.p.name)}</b></span><b>${fmt(x.p.price * x.q)}</b></div>`).join('')}</div>
       ${rejected ? '' : `<a class="wa-cta" href="#/info/contact"><span class="wa-ic">${ic('wa', 26)}</span><span><b>Questions about your order?</b>Message the shop on WhatsApp with reference ${esc(o.ref)}</span>${ic('arrow')}</a>`}
       ${suggestRow(suggestFor(o.items.map((i) => i[0])), 'Need anything else?', 'Add it to a new order, or mention it when the shop calls to confirm.')}
@@ -523,13 +531,15 @@
       <h2>2. Submit your order</h2><p>Give your name, phone number and delivery or pickup details. You get an order reference straight away.</p>
       <h2>3. The shop confirms</h2><p>We check stock and the delivery fee, then call or WhatsApp you with the final total. Nothing is reserved until we confirm.</p>
       <h2>4. Delivery or pickup</h2><p>Pay on delivery or at the shop using the methods the shop accepts.</p>`],
-    delivery: ['Delivery policy', `<p>We deliver across Mwanza. The delivery fee depends on location and load and is confirmed by phone before dispatch.</p>
-      <ul><li>Areas served: [CONFIRM AREAS]</li><li>Typical delivery time: [CONFIRM TIMES]</li><li>Large orders go by truck; someone must be on site to receive them.</li><li>Pickup from the shop is free once your order is confirmed.</li></ul>`],
+    delivery: ['Delivery policy', `<p>We deliver from two branches, Mwanza and Tarime. The delivery fee depends on location and load and is confirmed by phone before dispatch.</p>
+      ${Object.values(BRANCHES).map((b) => `<h2>${b.name} branch</h2><p>Areas served: ${b.areas.filter((a) => !a.startsWith('Other')).join(', ')} and nearby.</p>`).join('')}
+      <h2>Good to know</h2>
+      <ul><li>Exact delivery areas: [CONFIRM WITH EACH BRANCH]</li><li>Typical delivery time: [CONFIRM TIMES]</li><li>Large orders go by truck; someone must be on site to receive them.</li><li>Pickup from the shop is free once your order is confirmed.</li></ul>`],
     returns: ['Returns & cancellations', `<p>You can cancel an order free of charge until it is out for delivery. Call the shop with your order reference.</p>
       <ul><li>Unopened items: returnable within [CONFIRM] days with proof of purchase.</li><li>Cement and mixed paint cannot be returned once delivered.</li><li>Damaged on delivery: tell the driver and the shop the same day.</li></ul><p class="muted">Final policy to be confirmed by the shop.</p>`],
     privacy: ['Privacy', `<p>We only collect what we need to process your order: your name, phone number, optional email and delivery details.</p>
       <ul><li>Your details are only seen by shop staff.</li><li>We use your number to confirm and deliver your order.</li><li>No card details are collected; there is no online payment.</li></ul><p class="muted">Full privacy notice to be confirmed by the shop.</p>`],
-    contact: ['Contact us', `<div class="contact-cards"><a href="#/info/contact">${ic('phone')}<b>Call</b><span>[PHONE NUMBER]</span></a><a href="#/info/contact">${ic('wa')}<b>WhatsApp</b><span>[WHATSAPP NUMBER]</span></a><div>${ic('pin')}<b>Visit the shop</b><span>[SHOP ADDRESS], Mwanza, Tanzania</span></div><div>${ic('clock')}<b>Opening hours</b><span>Mon–Sat, [OPENING HOURS]</span></div></div>
+    contact: ['Contact us', `<div class="contact-cards"><a href="#/info/contact">${ic('phone')}<b>Call</b><span>[PHONE NUMBER]</span></a><a href="#/info/contact">${ic('wa')}<b>WhatsApp</b><span>[WHATSAPP NUMBER]</span></a>${Object.values(BRANCHES).map((b) => `<div>${ic('pin')}<b>${b.name} branch</b><span>${b.address}</span><span>${b.phone}</span></div>`).join('')}<div>${ic('clock')}<b>Opening hours</b><span>Mon–Sat, [OPENING HOURS]</span></div></div>
       <h2>Send us a message</h2><form class="stack" data-form="contact" novalidate><div class="form-grid"><div class="field"><label for="cName">Name</label><input class="input" id="cName" name="name"></div><div class="field"><label for="cPhone">Phone</label><input class="input" id="cPhone" name="phone" type="tel" placeholder="+255 7XX XXX XXX"></div><div class="field full"><label for="cMsg">Message</label><textarea class="input" id="cMsg" name="msg" rows="4"></textarea></div></div><div><button class="btn btn-primary" type="submit">Send message</button></div></form>`]
   };
   function vInfo(slug) {
@@ -541,9 +551,9 @@
 
   /* ---------------- admin ---------------- */
   const ADMIN_NAV = [['dashboard', 'Dashboard', 'grid'], ['orders', 'Orders', 'receipt'], ['products', 'Products', 'box'], ['categories', 'Categories', 'tag'], ['inventory', 'Inventory', 'stock'], ['deliveries', 'Deliveries', 'truck'], ['sales', 'Sales & payments', 'cash'], ['reports', 'Reports', 'chart'], ['users', 'Admin users', 'users']];
-  const aS = { filter: 'All', sel: null, psearch: '', range: '7d' };
+  const aS = { filter: 'All', branch: 'all', sel: null, psearch: '', range: '7d' };
   function vLogin() {
-    return `<div class="login"><div class="pic"><img src="${IMG('store-shelves')}" alt=""><div><span class="kicker light">Staff dashboard</span><h2>Manage orders, stock and sales in one place.</h2><p style="color:#D9DDE1">Finishers Point Africa · Mwanza</p></div></div>
+    return `<div class="login"><div class="pic"><img src="${IMG('store-shelves')}" alt=""><div><span class="kicker light">Staff dashboard</span><h2>Manage orders, stock and sales in one place.</h2><p style="color:#D9DDE1">Finishers Point Africa · Mwanza &amp; Tarime</p></div></div>
       <div class="form"><form data-form="login" novalidate><a href="#/" class="logo"><span class="logo-mark">F</span><span class="logo-text"><b>FINISHERS POINT</b><span>AFRICA</span></span></a>
         <div><h1 style="font-size:30px">Sign in</h1><p class="muted">Each staff member has their own account.</p></div>
         <div class="field"><label for="lEmail">Email</label><input class="input" id="lEmail" type="email" autocomplete="off" placeholder="name@shop-domain"></div>
@@ -569,8 +579,8 @@
   const kpi = (label, val, note, cls, href) => `<${href ? `a href="${href}"` : 'div'} class="kpi"><span>${label}</span><b>${val}</b><small class="${cls || ''}">${note}</small></${href ? 'a' : 'div'}>`;
   const SALES = { '7d': [['Tue', 1.2], ['Wed', 2.4], ['Thu', 1.8], ['Fri', 3.1], ['Sat', 3.9], ['Sun', 0.6], ['Mon', 2.2]], '30d': [['Wk 1', 9.8], ['Wk 2', 12.4], ['Wk 3', 11.1], ['Wk 4', 15.2]], '12m': [['Nov', 31], ['Dec', 42], ['Jan', 28], ['Feb', 30], ['Mar', 35], ['Apr', 33], ['May', 38], ['Jun', 41], ['Jul', 44], ['Aug', 47], ['Sep', 45], ['Oct', 52]] };
   const bars = (data) => { const max = Math.max(...data.map((d) => d[1])); return `<div class="bars">${data.map(([l, v], i) => `<div class="bar"><b>${v}M</b><i style="height:${Math.round(v / max * 170)}px;animation-delay:${i * 50}ms"></i><small>${l}</small></div>`).join('')}</div>`; };
-  const orderRow = (o, sel) => `<tr class="click${sel ? ' sel' : ''}" data-act="aSel" data-ref="${o.ref}" tabindex="0"><td class="refc">${o.ref}${o.fresh ? ' <span class="badge b-blue">New</span>' : ''}</td><td><b>${esc(o.name)}</b><span class="sub">${esc(o.phone)}</span></td><td>${o.items.length} items · ${o.items.reduce((s, i) => s + i[1], 0).toLocaleString()} units</td><td>${o.mode === 'pickup' ? 'Pickup' : 'Delivery · ' + esc(o.area.split(' – ')[0])}</td><td class="r nw"><b>${fmt(orderTotal(o))}</b></td><td class="nw">${badge(o.status)}</td><td class="muted nw">${esc(o.time)}</td></tr>`;
-  const ORDER_HEAD = '<thead><tr><th>Reference</th><th>Customer</th><th>Items</th><th>Receive</th><th class="r">Est. total</th><th>Status</th><th>Submitted</th></tr></thead>';
+  const orderRow = (o, sel) => `<tr class="click${sel ? ' sel' : ''}" data-act="aSel" data-ref="${o.ref}" tabindex="0"><td class="refc">${o.ref}${o.fresh ? ' <span class="badge b-blue">New</span>' : ''}</td><td><b>${esc(o.name)}</b><span class="sub">${esc(o.phone)}</span></td><td>${o.items.length} items · ${o.items.reduce((s, i) => s + i[1], 0).toLocaleString()} units</td><td><b>${brOf(o).name}</b><span class="sub">${o.mode === 'pickup' ? 'Pickup' : 'Delivery · ' + esc(o.area.split(' – ')[0])}</span></td><td class="r nw"><b>${fmt(orderTotal(o))}</b></td><td class="nw">${badge(o.status)}</td><td class="muted nw">${esc(o.time)}</td></tr>`;
+  const ORDER_HEAD = '<thead><tr><th>Reference</th><th>Customer</th><th>Items</th><th>Branch</th><th class="r">Est. total</th><th>Status</th><th>Submitted</th></tr></thead>';
 
   function aDash() {
     const pending = ORDERS.filter((o) => o.status === 'Pending');
@@ -585,12 +595,14 @@
   function aOrders(q) {
     if (q.ref && ORDERS.find((o) => o.ref === q.ref) && aS.sel !== q.ref && !aS.selFromQuery) { aS.sel = q.ref; aS.filter = 'All'; aS.selFromQuery = true; }
     const tabs = ['All', 'Pending', 'Confirmed', 'Preparing', 'Ready for delivery', 'Out for delivery', 'Delivered', 'Rejected'];
-    const list = ORDERS.filter((o) => aS.filter === 'All' || o.status === aS.filter);
+    const inBranch = (o) => aS.branch === 'all' || (o.branch || 'mwanza') === aS.branch;
+    const scoped = ORDERS.filter(inBranch);
+    const list = scoped.filter((o) => aS.filter === 'All' || o.status === aS.filter);
     if (!aS.sel || !ORDERS.find((o) => o.ref === aS.sel)) aS.sel = (list[0] || ORDERS[0]).ref;
     const o = ORDERS.find((x) => x.ref === aS.sel);
-    return `<div class="split"><div class="box"><div class="box-head"><div class="ftabs">${tabs.map((t) => `<button class="ftab${aS.filter === t ? ' on' : ''}" data-act="aFilter" data-f="${t}">${t}<em>${t === 'All' ? ORDERS.length : ORDERS.filter((x) => x.status === t).length}</em></button>`).join('')}</div></div>
+    return `<div class="split"><div class="box"><div class="box-head"><div class="ftabs">${tabs.map((t) => `<button class="ftab${aS.filter === t ? ' on' : ''}" data-act="aFilter" data-f="${t}">${t}<em>${t === 'All' ? scoped.length : scoped.filter((x) => x.status === t).length}</em></button>`).join('')}</div><label class="muted" style="display:flex;align-items:center;gap:8px;font-size:13px">Branch <select class="select sm" data-abranch="1"><option value="all"${aS.branch === 'all' ? ' selected' : ''}>All branches</option>${Object.entries(BRANCHES).map(([k, b]) => `<option value="${k}"${aS.branch === k ? ' selected' : ''}>${b.name}</option>`).join('')}</select></label></div>
       <div class="tscroll"><table style="min-width:880px">${ORDER_HEAD}<tbody>${list.length ? list.map((x) => orderRow(x, x.ref === aS.sel)).join('') : '<tr><td colspan="7" class="muted" style="text-align:center;padding:30px">No orders with this status.</td></tr>'}</tbody></table></div>
-      <div class="box-foot"><span>Showing ${list.length} of ${ORDERS.length} orders</span><button class="btn btn-outline btn-sm" data-act="csv">${ic('download', 18)}Export CSV</button></div></div>
+      <div class="box-foot"><span>Showing ${list.length} of ${ORDERS.length} orders${aS.branch === 'all' ? '' : ' · ' + BRANCHES[aS.branch].name + ' branch'}</span><button class="btn btn-outline btn-sm" data-act="csv">${ic('download', 18)}Export CSV</button></div></div>
       ${reviewPanel(o)}</div>`;
   }
   function reviewPanel(o) {
@@ -605,7 +617,7 @@
           ? (paidFor(o.ref) >= orderTotal(o) ? '<div class="note green">' + ic('check') + '<span>Delivered and fully paid.</span></div>' : `<button class="btn btn-primary btn-block" data-act="aPay" data-ref="${o.ref}">${ic('cash')}Record payment</button>`)
           : `<div class="note">${ic('info')}<span>${esc(o.reason || 'This order was not accepted.')}</span></div>`;
     return `<aside class="review" aria-label="Order review" id="review"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div><span class="muted" style="font-size:12px;font-weight:700;letter-spacing:.06em">REVIEW ORDER</span><h2>${o.ref}</h2></div>${badge(o.status)}</div>
-      <div class="cust"><b>${esc(o.name)}</b><span>${esc(o.phone)}</span><span>${o.mode === 'pickup' ? 'Pickup at the shop' : 'Delivery · ' + esc(o.area)}</span>${o.note ? `<span class="muted" style="font-size:13px">“${esc(o.note)}”</span>` : ''}
+      <div class="cust"><b>${esc(o.name)}</b><span>${esc(o.phone)}</span><span><b>${brOf(o).name} branch</b> · ${o.mode === 'pickup' ? 'Pickup at the shop' : 'Delivery · ' + esc(o.area)}</span>${o.note ? `<span class="muted" style="font-size:13px">“${esc(o.note)}”</span>` : ''}
         <div style="display:flex;gap:8px;margin-top:6px"><button class="btn btn-outline btn-sm" data-act="noop" data-msg="In the live system this opens the phone dialler.">${ic('phone', 16)}Call</button><button class="btn btn-outline btn-sm" data-act="noop" data-msg="In the live system this opens WhatsApp with the order reference.">${ic('wa', 16)}WhatsApp</button></div></div>
       <div>${items.map((x) => { const enough = x.p.qty >= x.q; return `<div class="ritem"><img src="${IMG(x.p.img)}" alt=""><span><b>${x.q.toLocaleString()} × ${esc(x.p.name)}</b><small class="${o.status !== 'Pending' ? 'muted' : enough ? (x.p.qty - x.q <= x.p.low ? 't-amber' : 't-green') : 't-amber'}">${o.status !== 'Pending' ? fmt(x.p.price) + ' each' : enough ? 'In stock · ' + x.p.qty.toLocaleString() + ' available' : 'Not enough stock · only ' + x.p.qty + ' available'}</small></span><b class="nw">${fmt(x.p.price * x.q)}</b></div>`; }).join('')}</div>
       <div class="stack" style="gap:6px;font-size:14px"><div class="sumrow"><span class="muted">Items</span><span>${fmt(orderSub(o))}</span></div><div class="sumrow"><span class="muted">Delivery</span><span id="feeOut">${o.mode === 'pickup' ? 'Pickup' : fmt(o.fee || 0)}</span></div>
@@ -699,7 +711,7 @@
   function aDeliveries() {
     const cols = ['Preparing', 'Ready for delivery', 'Out for delivery', 'Delivered'];
     const del = ORDERS.filter((o) => o.mode === 'delivery'); const pick = ORDERS.filter((o) => o.mode === 'pickup' && !['Rejected', 'Cancelled', 'Pending'].includes(o.status));
-    return `<div class="kanban">${cols.map((c) => { const list = del.filter((o) => o.status === c || (c === 'Preparing' && o.status === 'Confirmed')); return `<div class="kcol"><h3>${c}<span class="count" style="background:#fff;color:#16191C">${list.length}</span></h3>${list.map((o) => `<div class="kcard"><div style="display:flex;justify-content:space-between;gap:8px"><span class="refc">${o.ref}</span>${o.status === 'Confirmed' ? badge('Confirmed') : ''}</div><b>${esc(o.name)}</b><span class="muted">${ic('pin', 14)} ${esc(o.area)}</span><span class="muted">${o.items.reduce((s, i) => s + i[1], 0).toLocaleString()} units · ${fmt(orderTotal(o))}</span>
+    return `<div class="kanban">${cols.map((c) => { const list = del.filter((o) => o.status === c || (c === 'Preparing' && o.status === 'Confirmed')); return `<div class="kcol"><h3>${c}<span class="count" style="background:#fff;color:#16191C">${list.length}</span></h3>${list.map((o) => `<div class="kcard"><div style="display:flex;justify-content:space-between;gap:8px"><span class="refc">${o.ref}</span>${o.status === 'Confirmed' ? badge('Confirmed') : ''}</div><b>${esc(o.name)}</b><span class="muted">${ic('pin', 14)} ${brOf(o).name} · ${esc(o.area)}</span><span class="muted">${o.items.reduce((s, i) => s + i[1], 0).toLocaleString()} units · ${fmt(orderTotal(o))}</span>
       ${nextStatus(o) ? `<button class="btn btn-outline btn-sm" data-act="kNext" data-ref="${o.ref}">${nextLabel(o)} →</button>` : `<a class="nl" href="#/admin/orders?ref=${o.ref}">Open order</a>`}</div>`).join('') || '<span class="muted" style="font-size:13px;padding:4px">Nothing here.</span>'}</div>`; }).join('')}</div>
       <div class="box"><div class="box-head"><h2>Pickup orders</h2></div><div class="tscroll"><table>${ORDER_HEAD}<tbody>${pick.map((o) => orderRow(o)).join('') || '<tr><td colspan="7" class="muted" style="text-align:center;padding:24px">No pickup orders.</td></tr>'}</tbody></table></div></div>`;
   }
@@ -733,25 +745,29 @@
     const data = SALES[aS.range];
     const top = {}; ORDERS.filter((o) => !['Rejected', 'Cancelled'].includes(o.status)).forEach((o) => orderItems(o).forEach((x) => { top[x.p.id] = (top[x.p.id] || 0) + x.p.price * x.q; }));
     const topList = Object.entries(top).map(([id, v]) => [byId(id), v]).sort((a, b) => b[1] - a[1]).slice(0, 6); const tmax = topList.length ? topList[0][1] : 1;
+    const byBranch = Object.entries(BRANCHES).map(([k, b]) => [b.name, ORDERS.filter((o) => (o.branch || 'mwanza') === k), ]).map(([n, os]) => [n, os.length, os.filter((o) => !['Rejected', 'Cancelled'].includes(o.status)).reduce((t, o) => t + orderTotal(o), 0)]);
+    const bmax = Math.max(1, ...byBranch.map((b) => b[2]));
     const statuses = Object.keys(ST).map((s) => [s, ORDERS.filter((o) => o.status === s).length]).filter((x) => x[1]); const smax = Math.max(...statuses.map((s) => s[1]));
     return `<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center"><div class="ftabs">${[['7d', 'Last 7 days'], ['30d', 'Last 30 days'], ['12m', 'Last 12 months']].map(([k, l]) => `<button class="ftab${aS.range === k ? ' on' : ''}" data-act="aRange" data-r="${k}">${l}</button>`).join('')}</div><button class="btn btn-outline btn-sm" data-act="csv">${ic('download', 18)}Export orders CSV</button></div>
       <div class="kpis">${kpi('Sales (recorded payments)', 'TSh ' + data.reduce((s, d) => s + d[1], 0).toFixed(1) + 'M', 'Sample figures')}${kpi('Orders received', ORDERS.length, 'All statuses')}${kpi('Acceptance rate', Math.round(ORDERS.filter((o) => !['Rejected', 'Cancelled', 'Pending'].includes(o.status)).length / Math.max(1, ORDERS.filter((o) => o.status !== 'Pending').length) * 100) + '%', 'Confirmed vs rejected')}${kpi('Low-stock products', PRODUCTS.filter((p) => p.qty <= p.low).length, 'Right now', 'warn')}</div>
       <div class="box"><div class="box-head"><h2>Sales (TSh millions)</h2></div>${bars(data)}</div>
       <div class="grid2"><div class="box"><div class="box-head"><h2>Top products by order value</h2></div><div class="hbars">${topList.map(([p, v]) => `<div class="hbar"><div><span>${esc(p.name)}</span><b>${short(v)}</b></div><i><i style="width:${Math.round(v / tmax * 100)}%"></i></i></div>`).join('')}</div></div>
+        <div class="box"><div class="box-head"><h2>Orders by branch</h2></div><div class="hbars">${byBranch.map(([n, c, v]) => `<div class="hbar"><div><span><b>${n}</b> · ${c} orders</span><b>${short(v)}</b></div><i><i style="width:${Math.round(v / bmax * 100)}%"></i></i></div>`).join('')}</div></div>
         <div class="box"><div class="box-head"><h2>Orders by status</h2></div><div class="hbars">${statuses.map(([s, n]) => `<div class="hbar"><div><span>${badge(s)}</span><b>${n}</b></div><i><i style="width:${Math.round(n / smax * 100)}%;background:#16191C"></i></i></div>`).join('')}</div></div></div>`;
   }
   function aUsers() {
     return `<div class="note">${ic('info')}<span>Version 1 has one role (Administrator), but each person gets their own named account so every change is traceable. Sales and inventory roles can be added later.</span></div>
-      <div class="box"><div class="box-head"><h2>Team</h2><button class="btn btn-primary btn-sm" data-act="invite">${ic('plus', 18)}Invite user</button></div><div class="tscroll"><table style="min-width:680px"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Last active</th><th>Active</th></tr></thead><tbody>
-      ${USERS.map((u, i) => `<tr><td><span class="prodcell"><span class="avatar lt">${esc(u.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase())}</span><b>${esc(u.name)}</b></span></td><td class="muted">${esc(u.email)}</td><td>${esc(u.role)}</td><td><span class="badge ${u.status === 'Active' ? 'b-green' : u.status === 'Invited' ? 'b-blue' : 'b-grey'}">${esc(u.status)}</span></td><td class="muted">${esc(u.last)}</td>
+      <div class="box"><div class="box-head"><h2>Team</h2><button class="btn btn-primary btn-sm" data-act="invite">${ic('plus', 18)}Invite user</button></div><div class="tscroll"><table style="min-width:680px"><thead><tr><th>Name</th><th>Email</th><th>Branch</th><th>Role</th><th>Status</th><th>Last active</th><th>Active</th></tr></thead><tbody>
+      ${USERS.map((u, i) => `<tr><td><span class="prodcell"><span class="avatar lt">${esc(u.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase())}</span><b>${esc(u.name)}</b></span></td><td class="muted">${esc(u.email)}</td><td>${esc(u.branch || 'Both')}</td><td>${esc(u.role)}</td><td><span class="badge ${u.status === 'Active' ? 'b-green' : u.status === 'Invited' ? 'b-blue' : 'b-grey'}">${esc(u.status)}</span></td><td class="muted">${esc(u.last)}</td>
         <td>${i === 0 ? '<span class="muted" style="font-size:13px">You</span>' : `<button class="switch${u.status === 'Disabled' ? '' : ' on'}" data-act="userToggle" data-i="${i}" role="switch" aria-checked="${u.status !== 'Disabled'}" aria-label="Account active"></button>`}</td></tr>`).join('')}</tbody></table></div></div>`;
   }
   function invite() {
     openModal('Invite user', `<div class="field"><label for="un">Full name</label><input class="input" id="un" name="name"></div><div class="field"><label for="ue">Email</label><input class="input" id="ue" name="email" type="email"></div>
+      <div class="field"><label for="ub">Branch</label><select class="select" id="ub" name="branch"><option>Mwanza</option><option>Tarime</option><option>Both</option></select></div>
       <div class="field"><label for="ur">Role</label><select class="select" id="ur" name="role"><option>Administrator</option><option disabled>Sales staff (planned)</option><option disabled>Inventory staff (planned)</option></select></div>`, 'Send invite', (d) => {
       if (!d.name.trim()) return 'Enter a name.';
       if (!/^\S+@\S+\.\S+$/.test(d.email)) return 'Enter a valid email address.';
-      USERS.push({ name: d.name.trim(), email: d.email.trim(), role: d.role, status: 'Invited', last: '—' });
+      USERS.push({ name: d.name.trim(), email: d.email.trim(), branch: d.branch, role: d.role, status: 'Invited', last: '—' });
       save(); setTimeout(() => { render(true); okToast('Invite created for ' + esc(d.name.trim()) + '. (No email is sent in this prototype.)'); });
     });
   }
@@ -845,6 +861,7 @@
     cartQty(t) { const [id, v] = t.dataset.k.split('|'); const l = CART.find((x) => x.id === +id && String(x.v) === v); if (l) { l.qty = Math.max(1, l.qty + +t.dataset.d); save(); render(true); } },
     cartDel(t) { const [id, v] = t.dataset.k.split('|'); const p = byId(id); CART = CART.filter((x) => !(x.id === +id && String(x.v) === v)); save(); render(true); okToast(esc(p.name) + ' removed from your cart.'); },
     coMode(t) { CO.mode = t.dataset.m; save(); render(true); },
+    coBranch(t) { CO.branch = t.dataset.b; CO.area = brOf(CO).areas[0]; save(); render(true); },
     submitOrder() { submitOrder(); },
     resetFilters() { shopF.cats = new Set(CATS.map((c) => c.slug)); shopF.max = 200000; shopF.stock = false; shopF.q = ''; $$('[data-filter=cat]').forEach((i) => { i.checked = true; }); const m = $('#maxp'); if (m) m.value = 200000; $('#maxOut').textContent = fmt(200000); const s = $('[data-filter=stock]'); if (s) s.checked = false; refreshShop(); },
     menu() { drawerRoot.classList.toggle('open'); },
@@ -912,6 +929,7 @@
     if (t.dataset.co) { CO[t.dataset.co] = t.value; save(); return; }
     if (t.dataset.filter === 'cat') { if (t.checked) shopF.cats.add(t.value); else shopF.cats.delete(t.value); refreshShop(); }
     if (t.dataset.filter === 'stock') { shopF.stock = t.checked; refreshShop(); }
+    if (t.dataset.abranch) { aS.branch = t.value; aS.filter = 'All'; aS.sel = null; render(true); }
     if (t.dataset.filter === 'sort') { shopF.sort = t.value; refreshShop(); }
     if (t.dataset.act === 'file') { const n = $('#mFileName'); if (n) n.textContent = t.files[0] ? t.files[0].name + ' attached' : 'Click to choose a file'; }
   });
